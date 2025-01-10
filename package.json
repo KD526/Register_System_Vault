@@ -1,0 +1,15 @@
+{
+  "name": "register_system_vault",
+  "version": "1.0.0",
+  "description": "Custom Register for reports and status updates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
