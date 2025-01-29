@@ -35,6 +35,8 @@ app.post("/register", (req, res) => {
 
     if (errors.length) {
         return res.render("homepage", { errors })
+    } else {
+        return res.send("Thank you for registering!")
     }
 
     //save user details into DB
