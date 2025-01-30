@@ -3,6 +3,20 @@ const express = require("express")
 const db = require("better-sqlite3")("app.db")
 db.pragma("journal_mode = WAL")
 
+//db setup
+const createTables = db.transaction(() => {
+    db.prepare(
+        `
+        CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username STRING NOT NULL UNIQUE,
+        password STRING NOT NULL
+        )
+        `
+    ).run()
+})
+
+createTables()
 
 const app = express()
 
@@ -46,7 +60,7 @@ app.post("/register", (req, res) => {
 
 
     //log user and give them a cookie
-    
+
 
 
 })
