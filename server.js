@@ -1,4 +1,9 @@
 const express = require("express")
+//sqlite3
+const db = require("better-sqlite3")("app.db")
+db.pragma("journal_mode = WAL")
+
+
 const app = express()
 
 app.set("view engine", "ejs")
@@ -35,11 +40,12 @@ app.post("/register", (req, res) => {
 
     if (errors.length) {
         return res.render("homepage", { errors })
-    } else {
-        return res.send("Thank you for registering!")
     }
 
     //save user details into DB
+
+
+    //log user and give them a cookie
     
 
 
