@@ -24,6 +24,7 @@ app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static("public"))
 
+//middleware
 app.use(function (req, res, next) {
     res.locals.errors = []
     next()
@@ -37,6 +38,7 @@ app.get("/login", (req, res) => {
     res.render("login")
 })
 
+///register user
 app.post("/register", (req, res) => {
     const errors = []
     if (typeof req.body.username !== "string") req.body.username = ""
