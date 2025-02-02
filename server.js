@@ -30,10 +30,12 @@ app.use(function (req, res, next) {
     next()
 })
 
+//homepage 
 app.get("/", (req, res) => {
     res.render("homepage")
 })
 
+//LOGINS
 app.get("/login", (req, res) => {
     res.render("login")
 })
