@@ -47,12 +47,12 @@ app.post("/register", (req, res) => {
     if (typeof req.body.password !== "string") req.body.password = ""
 
     req.body.username = req.body.username.trim()
-    if (!req.body.username) errors.push("Must provide username!")
+    if (!req.body.username) errors.push("You ust provide username!")
     if (req.body.username && req.body.username.length < 3) errors.push("Must be atleast 3 characters!")
     if (req.body.username && req.body.username.length > 10) errors.push("Cannot be more than 10 characters!")
     if (req.body.username && !req.body.username.match(/^[a-zA-Z0-9]+$/)) errors.push("Cn only have letters and numbers!")
 
-    if (!req.body.password) errors.push("Must provide password!")
+    if (!req.body.password) errors.push("You Must provide password!")
     if (req.body.password && req.body.password.length < 8) errors.push("password Must be atleast 8 characters!")
     if (req.body.password && req.body.password.length > 20) errors.push("password Cannot be more than 20 characters!")
 
