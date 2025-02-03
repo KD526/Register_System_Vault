@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt")
 const express = require("express")
 //sqlite3
 const db = require("better-sqlite3")("app.db")
@@ -61,10 +62,19 @@ app.post("/register", (req, res) => {
     }
 
     //save user details into DB
+    const salt = bcrypt.genSaltSync(10)
+    req.body.password = bcrypt.hashSync(req.body.password, salt)
     const ourStatement =db.prepare("INSERT INTO users (username, password) VALUES (?, ?)")
     ourStatement.run(req.body.username, req.body.password)
-    res.send("Thank you for joining!")
+
     //log user and give them a cookie
+    res.cookie("mainApp", "hashValue", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24
+    })
+    res.send("Thank you for joining!")
 
 
 
