@@ -61,9 +61,9 @@ app.post("/register", (req, res) => {
     }
 
     //save user details into DB
-    const ourStatement =db.prepare("INSERT INTO users (username, password) VALUES (?, ?")
+    const ourStatement =db.prepare("INSERT INTO users (username, password) VALUES (?, ?)")
     ourStatement.run(req.body.username, req.body.password)
-
+    res.send("Thank you for joining!")
     //log user and give them a cookie
 
 
