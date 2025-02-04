@@ -48,6 +48,7 @@ app.post("/register", (req, res) => {
     if (typeof req.body.password !== "string") req.body.password = ""
 
     req.body.username = req.body.username.trim()
+    //registration checks
     if (!req.body.username) errors.push("You ust provide username!")
     if (req.body.username && req.body.username.length < 3) errors.push("Must be atleast 3 characters!")
     if (req.body.username && req.body.username.length > 10) errors.push("Cannot be more than 10 characters!")
