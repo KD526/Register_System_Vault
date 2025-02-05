@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const express = require("express")
 //sqlite3
@@ -69,6 +70,7 @@ app.post("/register", (req, res) => {
     ourStatement.run(req.body.username, req.body.password)
 
     //log user and give them a cookie
+    const tokenValue = jwt.sign(a, b)
     res.cookie("mainApp", "hashValue", {
         httpOnly: true,
         secure: true,
