@@ -49,12 +49,22 @@ app.use(function (req, res, next) {
 
 //homepage 
 app.get("/", (req, res) => {
+
+    if(req.user) {
+        return res.render("dashboard")
+    }
     res.render("homepage")
 })
 
 //LOGINS
 app.get("/login", (req, res) => {
     res.render("login")
+})
+
+//logout
+app.get("/logout", (req, res) => {
+    res.clearCookie("mainApp")
+    res.redirect("/")
 })
 
 ///register user
