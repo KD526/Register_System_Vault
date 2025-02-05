@@ -1,6 +1,7 @@
 require("dotenv").config()
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
+const cookieParser = require("cookie-parser")
 const express = require("express")
 //sqlite3
 const db = require("better-sqlite3")("app.db")
@@ -26,10 +27,23 @@ const app = express()
 app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static("public"))
+app.use(cookieParser())
 
 //middleware
 app.use(function (req, res, next) {
     res.locals.errors = []
+
+    try {
+        const decoded = jwt.verify(req.cookies.mainApp, process.env.JWT_KEY)
+        req.user = decoded
+
+    } catch (error) {
+        req.user = false
+    }
+
+    res.locals.user = req.user
+    console.log(req.user)
+
     next()
 })
 
@@ -64,33 +78,33 @@ app.post("/register", (req, res) => {
         return res.render("homepage", { errors })
     }
 
-   // Check if username already exists
-const checkUsername = db.prepare("SELECT username FROM users WHERE username = ?");
-const existingUser = checkUsername.get(req.body.username);
+    // Check if username already exists
+    const checkUsername = db.prepare("SELECT username FROM users WHERE username = ?");
+    const existingUser = checkUsername.get(req.body.username);
 
-if (existingUser) {
-    res.status(409).send("Username already exists. Please choose another.");
-} else {
-    
-    // Proceed with user registration
-    const salt = bcrypt.genSaltSync(10);
-    req.body.password = bcrypt.hashSync(req.body.password, salt);
-    const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-    const result = ourStatement.run(req.body.username, req.body.password);
+    if (existingUser) {
+        res.status(409).send("Username already exists. Please choose another.");
+    } else {
 
-    const checkResult = db.prepare("SELECT * FROM users WHERE ROWID = ?");
-    const user = checkResult.get(result.lastInsertRowid);
+        // Proceed with user registration
+        const salt = bcrypt.genSaltSync(10);
+        req.body.password = bcrypt.hashSync(req.body.password, salt);
+        const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        const result = ourStatement.run(req.body.username, req.body.password);
 
-    // Log user and give them a cookie
-    const tokenValue = jwt.sign({ exp: Math.floor(Date.now() / 1000) + 3600 * 24, color: "blue", userId: user.id, username: user.username }, process.env.JWT_KEY);
-    res.cookie("mainApp", tokenValue, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        maxAge: 1000 * 60 * 60 * 24 // In milliseconds
-    });
-    res.send("Thank you for joining!");
-}
+        const checkResult = db.prepare("SELECT * FROM users WHERE ROWID = ?");
+        const user = checkResult.get(result.lastInsertRowid);
+
+        // Log user and give them a cookie
+        const tokenValue = jwt.sign({ exp: Math.floor(Date.now() / 1000) + 3600 * 24, color: "blue", userId: user.id, username: user.username }, process.env.JWT_KEY);
+        res.cookie("mainApp", tokenValue, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 1000 * 60 * 60 * 24 // In milliseconds
+        });
+        res.send("Thank you for joining!");
+    }
 
 })
 
