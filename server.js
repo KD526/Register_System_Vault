@@ -1,3 +1,4 @@
+require("dotenv").config()
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const express = require("express")
@@ -63,23 +64,33 @@ app.post("/register", (req, res) => {
         return res.render("homepage", { errors })
     }
 
-    //save user details into DB
-    const salt = bcrypt.genSaltSync(10)
-    req.body.password = bcrypt.hashSync(req.body.password, salt)
-    const ourStatement =db.prepare("INSERT INTO users (username, password) VALUES (?, ?)")
-    ourStatement.run(req.body.username, req.body.password)
+   // Check if username already exists
+const checkUsername = db.prepare("SELECT username FROM users WHERE username = ?");
+const existingUser = checkUsername.get(req.body.username);
 
-    //log user and give them a cookie
-    const tokenValue = jwt.sign(a, b)
-    res.cookie("mainApp", "hashValue", {
+if (existingUser) {
+    res.status(409).send("Username already exists. Please choose another.");
+} else {
+    
+    // Proceed with user registration
+    const salt = bcrypt.genSaltSync(10);
+    req.body.password = bcrypt.hashSync(req.body.password, salt);
+    const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+    const result = ourStatement.run(req.body.username, req.body.password);
+
+    const checkResult = db.prepare("SELECT * FROM users WHERE ROWID = ?");
+    const user = checkResult.get(result.lastInsertRowid);
+
+    // Log user and give them a cookie
+    const tokenValue = jwt.sign({ exp: Math.floor(Date.now() / 1000) + 3600 * 24, color: "blue", userId: user.id, username: user.username }, process.env.JWT_KEY);
+    res.cookie("mainApp", tokenValue, {
         httpOnly: true,
         secure: true,
         sameSite: "strict",
-        maxAge: 1000 * 60 * 60 * 24 //in milliseconds
-    })
-    res.send("Thank you for joining!")
-
-
+        maxAge: 1000 * 60 * 60 * 24 // In milliseconds
+    });
+    res.send("Thank you for joining!");
+}
 
 })
 
