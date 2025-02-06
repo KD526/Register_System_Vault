@@ -56,8 +56,8 @@ app.get("/", (req, res) => {
     res.render("homepage")
 })
 
-//LOGINS
-app.get("/login", (req, res) => {
+//write login logic here
+app.post("/login", (req, res) => {
     res.render("login")
 })
 
