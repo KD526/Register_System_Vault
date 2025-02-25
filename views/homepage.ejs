@@ -7,17 +7,7 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <header>
-        <h2><a href="/">Portfolio App</a></h2>
-        <nav>
-            <% if (user) { %>
-                <a href="/create-file">Create File</a>
-                <a href="/logout">Log out</a>
-           <% } else {%>
-            <a href="/login">Log In</a>
-          <% } %>
-        </nav>
-    </header>
+    
     <main>
         <form action="/register" method="POST">
            <%  errors.forEach(error => { %> 
