@@ -64,7 +64,7 @@ app.post("/login", (req, res) => {
     if (typeof req.body.password !== "string") req.body.password = ""
 
     if(req.body.username.trim()== "") errors.push("Invalid username/password!")
-    if(req.body.username.trim() == "") eerors.push("Invalid password!")
+    if(req.body.username.trim() == "") eerors.push("Invalid password/username!")
 
 
 })
