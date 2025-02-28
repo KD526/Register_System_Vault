@@ -59,12 +59,14 @@ app.get("/", (req, res) => {
 
 //write login logic here
 app.post("/login", (req, res) => {
+    
     const errors = []
+
     if (typeof req.body.username !== "string") req.body.username = ""
     if (typeof req.body.password !== "string") req.body.password = ""
 
     if(req.body.username.trim()== "") errors.push("Invalid username/password!")
-    if(req.body.username.trim() == "") eerors.push("Invalid password/username!")
+    if(req.body.username.trim() == "") erors.push("Invalid password/username!")
 
 
 })
