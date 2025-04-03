@@ -29,6 +29,7 @@ app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static("public"))
 app.use(cookieParser())
+app.use()
 
 //middleware
 app.use(function (req, res, next) {
