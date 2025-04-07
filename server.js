@@ -24,7 +24,7 @@ createTables()
 
 //initialize express
 const app = express()
-//
+//use ejs
 app.set("view engine", "ejs")
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static("public"))
