@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
 app.post("/login", (req, res) => {
     
     const errors = []
-
+    //check & verify passwd and username
     if (typeof req.body.username !== "string") req.body.username = ""
     if (typeof req.body.password !== "string") req.body.password = ""
 
@@ -71,7 +71,6 @@ app.post("/login", (req, res) => {
 
 
 })
-
 //logout
 app.get("/logout", (req, res) => {
     res.clearCookie("mainApp")
@@ -112,7 +111,7 @@ app.post("/register", (req, res) => {
         req.body.password = bcrypt.hashSync(req.body.password, salt);
         const ourStatement = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
         const result = ourStatement.run(req.body.username, req.body.password);
-
+        //prepare db 
         const checkResult = db.prepare("SELECT * FROM users WHERE ROWID = ?");
         const user = checkResult.get(result.lastInsertRowid);
 
