@@ -102,6 +102,7 @@ app.post("/register", (req, res) => {
     const checkUsername = db.prepare("SELECT username * FROM users WHERE username = ?");
     const existingUser = checkUsername.get(req.body.username);
 
+    //check existing users
     if (existingUser) {
         res.status(409).send("Username already exists. Please choose another.");
     } else {
