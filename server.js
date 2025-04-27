@@ -34,7 +34,7 @@ app.use()
 //middleware
 app.use(function (req, res, next) {
     res.locals.errors = []
-
+    ///verify jason token
     try {
         const decoded = jwt.verify(req.cookies.mainApp, process.env.JWT_KEY)
         req.user = decoded

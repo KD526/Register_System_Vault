@@ -6,6 +6,7 @@
     <%- include("includes/header") %>
 
     <main>
+    
         <form action="/login" method="POST">
            <%  errors.forEach(error => { %> 
             <p class="notice"><%= error %></p>
